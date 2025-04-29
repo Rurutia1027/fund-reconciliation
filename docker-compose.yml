@@ -1,0 +1,28 @@
+services:
+  oltp:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: "sales_oltp"
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    ports:
+      - 54320:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "sales_oltp"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  generator:
+    build:
+      context: .
+      dockerfile: ./generator/Dockerfile
+      args:
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - ./import/csv/raw:/home/generator/csv
+      - ./import/xml/raw:/home/generator/xml
+    depends_on:
+      oltp:
+        condition: service_healthy

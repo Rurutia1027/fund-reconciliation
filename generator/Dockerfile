@@ -1,24 +1,26 @@
-FROM ubuntu:22.04
+FROM python:latest
 
-# Install Python 3.10 and dependencies
-RUN apt-get update && \
-    apt-get install -y software-properties-common curl gnupg && \
-    add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get update && \
-    apt-get install -y python3.10 python3.10-venv python3.10-dev python3-pip build-essential libpq-dev && \
-    ln -sf /usr/bin/python3.10 /usr/bin/python && \
-    ln -sf /usr/bin/pip3 /usr/bin/pip
+RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian bookworm main contrib non-free" > /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian bookworm-updates main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian-security bookworm-security main contrib non-free" >> /etc/apt/sources.list && \
+    apt-get update && apt-get install -y wget
 
-# Set working directory
-WORKDIR /app
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
 
-# Copy files into the container
-COPY requirements.txt .
-COPY generate.py .
-COPY assets.py .
+ENV POSTGRES_USER=$POSTGRES_USER
+ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+WORKDIR /home/generator
 
-# Run your script by default
+RUN mkdir csv
+
+RUN mkdir xml
+
+COPY generator .
+
+RUN pip install uv
+
+RUN uv pip install --system -r requirements.txt
+
 CMD ["python", "generate.py"]

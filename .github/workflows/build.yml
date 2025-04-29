@@ -21,7 +21,7 @@ jobs:
         run: docker compose build
 
       - name: Run containers
-        run: docker compose up  
+        run: docker compose up  -d
 
       - name: Wait and test containers
         run: |

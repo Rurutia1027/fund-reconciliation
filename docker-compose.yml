@@ -23,6 +23,7 @@ services:
     volumes:
       - ./import/csv/raw:/home/generator/csv
       - ./import/xml/raw:/home/generator/xml
+    command: ["python", "generate.py"]
     depends_on:
       oltp:
         condition: service_healthy

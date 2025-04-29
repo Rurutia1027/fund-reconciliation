@@ -14,13 +14,14 @@ ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 WORKDIR /home/generator
 
 RUN mkdir csv
-
 RUN mkdir xml
 
 COPY generator .
 
 RUN pip install uv
 
-RUN uv pip install --system -r requirements.txt
-
+RUN pip install declxml==1.1.3 names==0.3.0
+RUN pip install psycopg2
 CMD ["python", "generate.py"]
+# comment for debugging
+#CMD ["bash", "-c", "tail -f /dev/null"]

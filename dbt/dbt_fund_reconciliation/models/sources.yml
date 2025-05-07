@@ -1,0 +1,41 @@
+# This YAML file defines source tables for dbt to reference in models using the source () function. 
+# It does NOT contain any database connection details.
+
+# Database or other data middlewares' connection information (e.g., host, port, username, password, schema, etc.)
+# are configured separately in the `profiles.yml` file, which is located in ~/.dbt/ directory.
+
+# The relationship between this file and the dbt profile is as follows: 
+# - This file declares which schema and tables dbt should treat as source data. 
+# - The `profiles.yml` file specifies how dbt connects to the physical database that contains those scehmas/tables. 
+
+# In other words: 
+  # - sources.yml  = logical data declarations (what to use from different sources to construct more abstracted data metadata infos for DW)
+  # - profiles.yml = physical connection configuration (how to connect to specific data sources, like Hive, Database, or S3). 
+
+
+version: 2 
+
+sources: 
+  # here we declare the first source 
+  - name: import 
+    schema: import  # declared in the scope of dw as import/raw-data layer 
+    tables: 
+      - name: customers  # table name in original databases 
+        identifier: customers # table name declared in dbt current schema 
+      - name: products 
+        identifier: products 
+      - name: resellers 
+        identifier: resllers 
+      - name: resellercsv 
+        identifier: resellercsv
+      - name: transactions 
+        identifier: transactions 
+      - name: channels 
+        identifier: channels
+
+  # here we declare the second source
+  - name: preprocessed 
+    schema: staging # declared in the scope of dw as staging layer 
+    tables: 
+        - name: resellerxmlextracted
+          identifier: resellerxmlextracted

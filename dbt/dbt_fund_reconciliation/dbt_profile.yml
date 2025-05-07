@@ -1,0 +1,23 @@
+name: 'dbt_fund_reconciliation'
+
+version: '1.0.0'
+
+# dbt config file version 
+config-version: 2 
+
+# setting dbt project's different resources files and folder paths 
+model-paths: ["models"]  # SQL model path location 
+analysis-paths: ["analyses"] # SQL analyses class, optional 
+test-paths: ["tests"] # custom defined test scripts 
+seed-paths: ["seeds"] # raw data (csv) file location 
+macro-paths: ["macros"] #  macro variables declaration files location 
+snapshot-paths: ["snapshot"] # snapshots storage path 
+
+# compiled SQL file ouput path 
+target-path: "target"
+
+# folders and files can be cleaned via command `dbt clean`
+# usually the folders and files compiled 
+clean-targets: 
+  - "target"
+  - "dbt_packages"

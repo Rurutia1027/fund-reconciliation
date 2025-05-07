@@ -1,0 +1,12 @@
+dbt_fund_reconciliation:
+  outputs:
+    dev:
+      type: postgres
+      threads: 4
+      host: dw
+      port: 5432
+      user: "{{ env_var('POSTGRES_USER') }}"
+      pass: "{{ env_var('POSTGRES_PASSWORD') }}"
+      dbname: fund_dw
+      schema: dev
+  target: dev
